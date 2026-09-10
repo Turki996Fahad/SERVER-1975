@@ -257,15 +257,15 @@
             <textarea id="notes" rows="4" data-placeholder-ar="أي معلومات إضافية..." data-placeholder-en="Any additional information..." placeholder="أي معلومات إضافية..."></textarea>
           </label>
 
-          <button class="primary-btn full" type="submit" data-ar="تجهيز الطلب" data-en="Generate Request">تجهيز الطلب</button>
+          <button class="primary-btn full" type="submit" data-ar="إرسال الطلب" data-en="Submit Application">إرسال الطلب</button>
         </form>
       </div>
 
       <div class="container result-wrap hidden" id="result-wrap">
-        <h3 data-ar="طلبك جاهز" data-en="Your request is ready">طلبك جاهز</h3>
+        <h3 data-ar="حالة الطلب" data-en="Application Status">حالة الطلب</h3>
         <textarea id="result" rows="12" readonly></textarea>
         <div class="result-actions">
-          <button class="secondary-btn" id="copyBtn" type="button" data-ar="نسخ الطلب" data-en="Copy Request">نسخ الطلب</button>
+          
           <a class="primary-btn" href="https://discord.gg/ZzVYX9gApn" target="_blank" rel="noopener" data-ar="فتح الديسكورد" data-en="Open Discord">فتح الديسكورد</a>
         </div>
       </div>
@@ -325,7 +325,9 @@
       return labels[value][lang];
     }
 
-    form.addEventListener("submit", (e) => {
+    const WORKER_URL = "https://server1975-migration.trook1235bsjsishhsb.workers.dev/";
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const playerName = document.getElementById("playerName").value.trim();
@@ -338,36 +340,49 @@
       const language = document.getElementById("language").value;
       const notes = document.getElementById("notes").value.trim();
 
-      if (currentLang === "ar") {
-        result.value =
-`طلب هجرة إلى سيرفر #1975
+      const payload = {
+        name: playerName,
+        age: hq,
+        discord: "Current Server: " + currentServer,
+        alliance: alliance,
+        message:
+          "Total Power: " + power + "\n" +
+          "First Squad Power: " + firstSquadPower + "\n" +
+          "Squad Type: " + squadLabel(squadType, "en") + "\n" +
+          "Language: " + language + "\n" +
+          "Notes: " + (notes || "None")
+      };
 
-اسم اللاعب: ${playerName}
-السيرفر الحالي: ${currentServer}
-مستوى HQ: ${hq}
-القوة الكلية: ${power}
-قوة الفيلق الأول: ${firstSquadPower}
-نوع الفيلق: ${squadLabel(squadType, "ar")}
-التحالف المطلوب: ${alliance}
-اللغة: ${language}
-ملاحظات: ${notes || "لا يوجد"}`;
-      } else {
-        result.value =
-`Migration Request to Server #1975
+      const submitButton = form.querySelector('button[type="submit"]');
+      const originalText = submitButton.textContent;
+      submitButton.disabled = true;
+      submitButton.textContent = currentLang === "ar" ? "جاري الإرسال..." : "Sending...";
 
-Player Name: ${playerName}
-Current Server: ${currentServer}
-HQ Level: ${hq}
-Total Power: ${power}
-First Squad Power: ${firstSquadPower}
-Squad Type: ${squadLabel(squadType, "en")}
-Preferred Alliance: ${alliance}
-Language: ${language}
-Notes: ${notes || "None"}`;
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("Send failed");
+
+        result.value = currentLang === "ar"
+          ? "✅ تم إرسال طلبك بنجاح إلى إدارة سيرفر 1975."
+          : "✅ Your application was sent successfully to Server 1975 staff.";
+
+        resultWrap.classList.remove("hidden");
+        resultWrap.scrollIntoView({behavior:"smooth", block:"center"});
+        form.reset();
+      } catch (error) {
+        result.value = currentLang === "ar"
+          ? "❌ تعذر إرسال الطلب. حاول مرة أخرى."
+          : "❌ Could not send the application. Please try again.";
+        resultWrap.classList.remove("hidden");
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
       }
-
-      resultWrap.classList.remove("hidden");
-      resultWrap.scrollIntoView({behavior:"smooth", block:"center"});
     });
 
     copyBtn.addEventListener("click", async () => {
