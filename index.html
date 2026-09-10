@@ -3,18 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#10151b" />
+  <meta name="theme-color" content="#0b1015" />
   <title>Server 1975 Migration | Last War</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#0b1015;--panel:#121a22;--panel2:#0f161d;--text:#f3f5f7;
+      --muted:#a8b0b9;--accent:#f0a928;--line:#27313b
+    }
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Arial,Tahoma,sans-serif;background:var(--bg);color:var(--text);line-height:1.8}
+    a{text-decoration:none;color:inherit}
+    button,input,textarea,select{font-family:inherit}
+    .container{width:min(1100px,92%);margin:auto}
+    .hero{
+      min-height:72vh;display:flex;flex-direction:column;
+      background:
+        radial-gradient(circle at 20% 20%,rgba(240,169,40,.17),transparent 34%),
+        linear-gradient(rgba(8,12,16,.68),rgba(8,12,16,.94)),
+        repeating-linear-gradient(135deg,#141b22 0,#141b22 2px,#10161c 2px,#10161c 12px);
+      border-bottom:1px solid var(--line)
+    }
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;gap:20px}
+    .nav-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+    .brand{font-size:25px;font-weight:800;letter-spacing:1px}.brand span{color:var(--accent)}
+    .small-btn,.secondary-btn,.primary-btn,.lang-btn{
+      display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border-radius:10px;
+      font-weight:800;cursor:pointer
+    }
+    .small-btn{border:1px solid var(--line);background:#121a22}
+    .accent-outline{border-color:rgba(240,169,40,.55)}
+    .lang-btn{background:transparent;color:var(--accent);border:1px solid rgba(240,169,40,.45)}
+    .primary-btn{background:var(--accent);color:#151515;border:0}
+    .secondary-btn{background:transparent;color:var(--text);border:1px solid #46515d}
+    .hero-content{margin:auto;padding:70px 0 95px}
+    .eyebrow{color:var(--accent);font-size:13px;font-weight:800;letter-spacing:2px}
+    h1{font-size:clamp(38px,7vw,72px);line-height:1.2;margin:12px 0 18px;max-width:850px}
+    h1 span{color:var(--accent)}
+    h2{font-size:clamp(28px,4vw,42px);line-height:1.35;margin:8px 0}
+    h3{margin:8px 0}
+    .hero-text{max-width:720px;color:#c3cad1;font-size:18px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .section{padding:80px 0}
+    .alt{background:var(--panel2);border-block:1px solid var(--line)}
+    .section-head{margin-bottom:34px}
+    .muted{color:var(--muted)}
+    .cards{display:grid;gap:18px}.cards.three{grid-template-columns:repeat(3,1fr)}
+    .card{background:linear-gradient(180deg,#151e27,#10171e);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 12px 28px rgba(0,0,0,.12)}
+    .card p{color:var(--muted);margin-bottom:0}.icon{font-size:30px}
+    .alliance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .alliance-chip{padding:24px;border:1px solid var(--line);border-radius:14px;background:#10171e;text-align:center;font-size:23px;font-weight:800;letter-spacing:1px}
+    .discord-btn{width:max-content}
+    .apply-section{background:radial-gradient(circle at 80% 10%,rgba(240,169,40,.12),transparent 26%),#0c1218;border-top:1px solid var(--line)}
+    .apply-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:34px;align-items:start}
+    .apply-copy p{color:var(--muted)}
+    .form{display:grid;gap:16px}
+    label{display:grid;gap:7px;font-weight:700}
+    input,textarea,select{width:100%;background:#0b1117;color:var(--text);border:1px solid #303b46;border-radius:10px;padding:13px 14px;font:inherit;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .full{width:100%;margin-top:4px}
+    .result-wrap{margin-top:26px;padding:24px;border:1px solid var(--line);border-radius:14px;background:#10171e}
+    .result-wrap textarea{margin:12px 0}
+    .result-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .hidden{display:none}
+    footer{border-top:1px solid var(--line);background:#080d11}
+    .footer{padding:25px 0;display:flex;justify-content:space-between;gap:20px;color:#8e98a3;font-size:14px}
+    html[dir="ltr"] body{text-align:left}
+    @media(max-width:800px){
+      .nav{align-items:flex-start;flex-direction:column}.nav-actions{width:100%}
+      .cards.three,.apply-wrap,.grid-2{grid-template-columns:1fr}
+      .alliance-grid{grid-template-columns:repeat(2,1fr)}
+      .hero{min-height:auto}.hero-content{padding:65px 0}
+      .footer{flex-direction:column}.small-btn,.lang-btn{flex:1}
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
     <nav class="nav container">
       <div class="brand">LW <span>1975</span></div>
-
       <div class="nav-actions">
         <button class="lang-btn" id="langBtn" type="button">English</button>
         <a class="small-btn" href="https://discord.gg/ZzVYX9gApn" target="_blank" rel="noopener" data-ar="الديسكورد" data-en="Discord">الديسكورد</a>
@@ -84,7 +152,6 @@
              اختر التحالف الذي ترغب بالانضمام إليه عند تقديم الطلب.
           </p>
         </div>
-
         <div class="alliance-grid">
           <div class="alliance-chip">ROYL</div>
           <div class="alliance-chip">R3B</div>
@@ -98,4 +165,224 @@
     </section>
 
     <section class="section container">
-... (118 lines left)
+      <div class="section-head">
+        <p class="eyebrow">COMMUNITY</p>
+        <h2 data-ar="تواصل معنا على Discord" data-en="Join us on Discord">تواصل معنا على Discord</h2>
+        <p class="muted"
+           data-ar="بعد تجهيز طلبك تقدر تنسخه وترسله مباشرة لمسؤولي الهجرة في الديسكورد."
+           data-en="After preparing your request, copy it and send it to the migration team on Discord.">
+           بعد تجهيز طلبك تقدر تنسخه وترسله مباشرة لمسؤولي الهجرة في الديسكورد.
+        </p>
+      </div>
+      <a class="primary-btn discord-btn" href="https://discord.gg/ZzVYX9gApn" target="_blank" rel="noopener"
+         data-ar="فتح ديسكورد سيرفر 1975" data-en="Open Server 1975 Discord">
+         فتح ديسكورد سيرفر 1975
+      </a>
+    </section>
+
+    <section class="section apply-section" id="apply">
+      <div class="container apply-wrap">
+        <div class="apply-copy">
+          <p class="eyebrow">APPLY NOW</p>
+          <h2 data-ar="قدّم طلب الهجرة" data-en="Submit Migration Request">قدّم طلب الهجرة</h2>
+          <p data-ar="عبّ بياناتك، وبعدها الموقع يجهز لك نص طلب مرتب تقدر تنسخه وترسله في الديسكورد."
+             data-en="Fill in your details and the website will generate a formatted request that you can copy and send on Discord.">
+             عبّ بياناتك، وبعدها الموقع يجهز لك نص طلب مرتب تقدر تنسخه وترسله في الديسكورد.
+          </p>
+        </div>
+
+        <form class="form card" id="migration-form">
+          <label>
+            <span data-ar="اسم اللاعب" data-en="Player Name">اسم اللاعب</span>
+            <input id="playerName" required data-placeholder-ar="مثال: Commander" data-placeholder-en="Example: Commander" placeholder="مثال: Commander" />
+          </label>
+
+          <div class="grid-2">
+            <label>
+              <span data-ar="السيرفر الحالي" data-en="Current Server">السيرفر الحالي</span>
+              <input id="currentServer" required data-placeholder-ar="مثال: #1234" data-placeholder-en="Example: #1234" placeholder="مثال: #1234" />
+            </label>
+            <label>
+              <span data-ar="مستوى HQ" data-en="HQ Level">مستوى HQ</span>
+              <input id="hq" required data-placeholder-ar="مثال: 30" data-placeholder-en="Example: 30" placeholder="مثال: 30" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>
+              <span data-ar="القوة الكلية" data-en="Total Power">القوة الكلية</span>
+              <input id="power" required data-placeholder-ar="مثال: 150M" data-placeholder-en="Example: 150M" placeholder="مثال: 150M" />
+            </label>
+            <label>
+              <span data-ar="قوة الفيلق الأول" data-en="First Squad Power">قوة الفيلق الأول</span>
+              <input id="firstSquadPower" required data-placeholder-ar="مثال: 25M" data-placeholder-en="Example: 25M" placeholder="مثال: 25M" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>
+              <span data-ar="نوع الفيلق" data-en="Squad Type">نوع الفيلق</span>
+              <select id="squadType" required>
+                <option value="tanks" data-ar="دبابات" data-en="Tanks">دبابات</option>
+                <option value="aircraft" data-ar="طيارات" data-en="Aircraft">طيارات</option>
+                <option value="missiles" data-ar="صواريخ" data-en="Missiles">صواريخ</option>
+              </select>
+            </label>
+
+            <label>
+              <span data-ar="التحالف المطلوب" data-en="Preferred Alliance">التحالف المطلوب</span>
+              <select id="alliance" required>
+                <option>ROYL</option>
+                <option>R3B</option>
+                <option>UBF</option>
+                <option>MOD</option>
+                <option>VVIP</option>
+                <option>BOSS</option>
+                <option>EVOF</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            <span data-ar="اللغة" data-en="Language">اللغة</span>
+            <select id="language">
+              <option value="Arabic">العربية</option>
+              <option value="English">English</option>
+              <option value="Arabic + English">العربية + English</option>
+            </select>
+          </label>
+
+          <label>
+            <span data-ar="ملاحظات" data-en="Notes">ملاحظات</span>
+            <textarea id="notes" rows="4" data-placeholder-ar="أي معلومات إضافية..." data-placeholder-en="Any additional information..." placeholder="أي معلومات إضافية..."></textarea>
+          </label>
+
+          <button class="primary-btn full" type="submit" data-ar="تجهيز الطلب" data-en="Generate Request">تجهيز الطلب</button>
+        </form>
+      </div>
+
+      <div class="container result-wrap hidden" id="result-wrap">
+        <h3 data-ar="طلبك جاهز" data-en="Your request is ready">طلبك جاهز</h3>
+        <textarea id="result" rows="12" readonly></textarea>
+        <div class="result-actions">
+          <button class="secondary-btn" id="copyBtn" type="button" data-ar="نسخ الطلب" data-en="Copy Request">نسخ الطلب</button>
+          <a class="primary-btn" href="https://discord.gg/ZzVYX9gApn" target="_blank" rel="noopener" data-ar="فتح الديسكورد" data-en="Open Discord">فتح الديسكورد</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer">
+      <span>Last War • Server 1975</span>
+      <span>ROYL • R3B • UBF • MOD • VVIP • BOSS • EVOF</span>
+    </div>
+  </footer>
+
+  <script>
+    let currentLang = "ar";
+    const langBtn = document.getElementById("langBtn");
+    const form = document.getElementById("migration-form");
+    const resultWrap = document.getElementById("result-wrap");
+    const result = document.getElementById("result");
+    const copyBtn = document.getElementById("copyBtn");
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      const html = document.documentElement;
+
+      if (lang === "ar") {
+        html.lang = "ar";
+        html.dir = "rtl";
+        langBtn.textContent = "English";
+      } else {
+        html.lang = "en";
+        html.dir = "ltr";
+        langBtn.textContent = "العربية";
+      }
+
+      document.querySelectorAll("[data-ar][data-en]").forEach(el => {
+        const value = el.dataset[lang];
+        if (el.tagName === "H1") el.innerHTML = value;
+        else el.textContent = value;
+      });
+
+      document.querySelectorAll("[data-placeholder-ar][data-placeholder-en]").forEach(el => {
+        el.placeholder = lang === "ar" ? el.dataset.placeholderAr : el.dataset.placeholderEn;
+      });
+    }
+
+    langBtn.addEventListener("click", () => {
+      setLanguage(currentLang === "ar" ? "en" : "ar");
+    });
+
+    function squadLabel(value, lang) {
+      const labels = {
+        tanks: { ar: "دبابات", en: "Tanks" },
+        aircraft: { ar: "طيارات", en: "Aircraft" },
+        missiles: { ar: "صواريخ", en: "Missiles" }
+      };
+      return labels[value][lang];
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const playerName = document.getElementById("playerName").value.trim();
+      const currentServer = document.getElementById("currentServer").value.trim();
+      const hq = document.getElementById("hq").value.trim();
+      const power = document.getElementById("power").value.trim();
+      const firstSquadPower = document.getElementById("firstSquadPower").value.trim();
+      const squadType = document.getElementById("squadType").value;
+      const alliance = document.getElementById("alliance").value;
+      const language = document.getElementById("language").value;
+      const notes = document.getElementById("notes").value.trim();
+
+      if (currentLang === "ar") {
+        result.value =
+`طلب هجرة إلى سيرفر #1975
+
+اسم اللاعب: ${playerName}
+السيرفر الحالي: ${currentServer}
+مستوى HQ: ${hq}
+القوة الكلية: ${power}
+قوة الفيلق الأول: ${firstSquadPower}
+نوع الفيلق: ${squadLabel(squadType, "ar")}
+التحالف المطلوب: ${alliance}
+اللغة: ${language}
+ملاحظات: ${notes || "لا يوجد"}`;
+      } else {
+        result.value =
+`Migration Request to Server #1975
+
+Player Name: ${playerName}
+Current Server: ${currentServer}
+HQ Level: ${hq}
+Total Power: ${power}
+First Squad Power: ${firstSquadPower}
+Squad Type: ${squadLabel(squadType, "en")}
+Preferred Alliance: ${alliance}
+Language: ${language}
+Notes: ${notes || "None"}`;
+      }
+
+      resultWrap.classList.remove("hidden");
+      resultWrap.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(result.value);
+        const old = copyBtn.textContent;
+        copyBtn.textContent = currentLang === "ar" ? "تم النسخ ✓" : "Copied ✓";
+        setTimeout(() => copyBtn.textContent = old, 1800);
+      } catch {
+        result.select();
+        document.execCommand("copy");
+      }
+    });
+
+    setLanguage("ar");
+  </script>
+</body>
+</html>
